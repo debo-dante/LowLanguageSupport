@@ -1,0 +1,207 @@
+# Kannada Language Model Configuration
+# Specialized configuration for Kannada language processing
+
+# Base model configuration optimized for Kannada
+model:
+  type: "bert"  # BERT works well for Kannada
+  vocab_size: 32000  # Optimized for Kannada vocabulary
+  hidden_size: 768
+  num_hidden_layers: 12
+  num_attention_heads: 12
+  intermediate_size: 3072
+  max_position_embeddings: 1024  # Kannada sentences can be long
+  dropout_prob: 0.1
+  layer_norm_eps: 1e-12
+  
+# Kannada-specific language settings
+language:
+  primary: "kn"  # Kannada ISO code
+  script: "kannada"
+  unicode_range: [0x0C80, 0x0CFF]  # Kannada Unicode block
+  supported_variants: ["kn", "kn-IN"]
+  script_embeddings: true
+  multilingual: true  # Enable for related Dravidian languages
+  
+# Kannada script characteristics
+script_info:
+  name: "Kannada"
+  family: "Dravidian" 
+  direction: "ltr"  # Left-to-right
+  digits: "೦೧೨೩೪೫೬೭೮೯"  # Kannada numerals
+  punctuation: ["।", "॥", "?", "!", ",", "."]
+  vowels: ["ಅ", "ಆ", "ಇ", "ಈ", "ಉ", "ಊ", "ಋ", "ೠ", "ಌ", "ೡ", "ಎ", "ಏ", "ಐ", "ಒ", "ಓ", "ಔ"]
+  consonants: ["ಕ", "ಖ", "ಗ", "ಘ", "ಙ", "ಚ", "ಛ", "ಜ", "ಝ", "ಞ", "ಟ", "ಠ", "ಡ", "ಢ", "ಣ", "ತ", "ಥ", "ದ", "ಧ", "ನ", "ಪ", "ಫ", "ಬ", "ಭ", "ಮ", "ಯ", "ರ", "ಲ", "ವ", "ಶ", "ಷ", "ಸ", "ಹ", "ಳ", "ೞ", "ೱ", "ೲ"]
+
+# Training configuration for Kannada
+training:
+  batch_size: 12  # Slightly smaller due to longer sequences
+  learning_rate: 2e-5
+  num_epochs: 15  # More epochs for low-resource language
+  warmup_steps: 1500
+  weight_decay: 0.01
+  max_grad_norm: 1.0
+  gradient_accumulation_steps: 6
+  eval_steps: 200
+  save_steps: 500
+  logging_steps: 50
+  
+  # Optimizer settings
+  optimizer: "adamw"
+  adam_epsilon: 1e-8
+  beta1: 0.9
+  beta2: 0.999
+  
+  # Scheduler settings
+  scheduler: "cosine_with_warmup"  # Better for low-resource
+  
+# Kannada data configuration
+data:
+  max_sequence_length: 768  # Longer for Kannada compound words
+  pad_to_max_length: false
+  preprocessing:
+    normalize_unicode: true
+    remove_urls: true
+    remove_emails: true
+    remove_phone_numbers: true
+    normalize_digits: true
+    remove_extra_whitespace: true
+    preserve_kannada_punctuation: true
+    handle_mixed_script: true  # Common in Kannada texts
+    
+# Kannada tokenizer configuration
+tokenizer:
+  model_type: "wordpiece"
+  vocab_size: 32000
+  min_frequency: 2
+  unk_token: "[UNK]"
+  special_tokens:
+    - "[PAD]"
+    - "[UNK]" 
+    - "[CLS]"
+    - "[SEP]"
+    - "[MASK]"
+    - "[KSTART]"  # Kannada text start
+    - "[KEND]"    # Kannada text end
+  
+  # Kannada-specific tokenization
+  kannada_specific:
+    split_on_virama: true  # Handle halant/virama properly
+    preserve_conjuncts: true  # Keep conjunct characters together
+    normalize_variants: true  # Normalize character variants
+
+# Adapter configuration for efficient Kannada fine-tuning
+adapters:
+  enabled: true
+  reduction_factor: 4
+  dropout: 0.1
+  kannada_specific_adapters: true
+  
+# Evaluation configuration for Kannada
+evaluation:
+  tasks: ["language_modeling", "classification", "similarity", "cross_lingual", "morphology"]
+  metrics: ["accuracy", "f1", "perplexity", "bleu", "morphological_accuracy"]
+  cross_lingual_languages: ["ta", "te", "ml"]  # Related Dravidian languages
+  
+# Kannada data sources
+data_sources:
+  news_sites:
+    - name: "Prajavani"
+      url: "https://www.prajavani.net/"
+      selectors: [".story-body", ".content", "article"]
+    - name: "Kannada Prabha"
+      url: "https://kannadaprabha.com/"
+      selectors: [".field-item", ".content-area"]
+    - name: "Udayavani"
+      url: "https://www.udayavani.com/"
+      selectors: [".news-details", ".story-content"]
+    - name: "Vijaya Karnataka"
+      url: "https://vijayakarnataka.com/"
+      selectors: [".article-body", ".news-content"]
+      
+  literature_sources:
+    - name: "Kannada Sahitya Parishat"
+      url: "https://kannadasahityaparishat.org/"
+    - name: "Kuvempu University Digital Library"
+      url: "http://14.139.186.108:8080/"
+      
+  government_sources:
+    - name: "Karnataka Government Portal"
+      url: "https://www.karnataka.gov.in/kannada/"
+    - name: "Bangalore City Corporation"
+      url: "https://www.bengaluru.gov.in/"
+
+# Stop words for Kannada
+stop_words:
+  - "ಅವರು"      # they/he/she (respectful)
+  - "ಅದು"       # that/it
+  - "ಇದು"       # this
+  - "ಆದರೆ"      # but
+  - "ಅಥವಾ"      # or
+  - "ಅಲ್ಲ"      # no/not
+  - "ಅಲ್ಲಿ"     # there
+  - "ಇಲ್ಲಿ"     # here
+  - "ಅಂದರೆ"     # that is/means
+  - "ಆಗ"        # then
+  - "ಇಂದು"      # today
+  - "ನೀವು"      # you (respectful)
+  - "ನಾನು"      # I
+  - "ನಮ್ಮ"      # our
+  - "ಅವರ"       # their
+  - "ಎಂದು"      # said/that
+  - "ಮಾತ್ರ"     # only
+  - "ಕೂಡ"       # also
+  - "ಹಾಗೂ"      # and
+  - "ಅಥವಾ"      # or
+  - "ಸಹ"        # also
+  - "ಕೆಲವು"     # some
+  - "ಬಹುಶಃ"     # perhaps
+  - "ಸಾಮಾನ್ಯವಾಗಿ" # generally
+  - "ವಿಶೇಷವಾಗಿ"  # especially
+
+# Common Kannada prefixes and suffixes
+morphology:
+  prefixes:
+    - "ಅ"         # negative prefix
+    - "ಸು"        # good/well prefix
+    - "ದುರ್"      # bad prefix
+    - "ಅತಿ"       # excessive prefix
+    - "ಉಪ"        # sub prefix
+    
+  suffixes:
+    - "ಅವರು"      # respectful person marker
+    - "ಗಳು"       # plural marker
+    - "ಇಂದ"       # from/by marker
+    - "ಅಲ್ಲಿ"     # location marker
+    - "ಒಳಗೆ"      # inside marker
+    - "ಮೇಲೆ"      # on/above marker
+    
+  verb_endings:
+    - "ಇದೆ"       # exists/is there
+    - "ಅದೆ"       # exists (variant)
+    - "ಇಲ್ಲ"      # doesn't exist
+    - "ಆಗುತ್ತದೆ"   # happens/becomes
+    - "ಮಾಡುತ್ತಾರೆ" # do (respectful)
+
+# Hardware configuration
+hardware:
+  device: "auto"
+  mixed_precision: true
+  dataloader_num_workers: 4
+  pin_memory: true
+  
+# Logging specific to Kannada experiments
+logging:
+  level: "INFO"
+  use_wandb: true
+  project_name: "kannada-nlp"
+  experiment_name: "kannada-bert-v1"
+  log_kannada_samples: true  # Log Kannada text samples for inspection
+  
+# Model saving for Kannada
+saving:
+  output_dir: "./data/models/kannada"
+  save_best_model: true
+  save_total_limit: 5
+  load_best_model_at_end: true
+  save_tokenizer: true
+  save_config: true
