@@ -722,17 +722,10 @@ MIT License - Feel free to use, modify, and distribute! 🎉
 
 ## 📧 Contact & Support
 
-- 🐛 **Issues**: [GitHub Issues](https://github.com/yourusername/indian-language-nlp/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/yourusername/indian-language-nlp/discussions)
-- 🐦 **Twitter**: [@YourHandle](https://twitter.com/yourhandle)
-- 📧 **Email**: your.email@example.com
+- 📧 **Email**: eng24cse0010@dsu.edu.in
 
 ### 🎆 Community
 
-Join our community:
-- 🐥 [Discord Server](https://discord.gg/yourserver)
-- 📰 [Newsletter](https://yoursite.com/newsletter)
-- 📺 [YouTube Channel](https://youtube.com/yourchannel)
 
 ---
 
