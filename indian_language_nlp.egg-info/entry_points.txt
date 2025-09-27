@@ -1,0 +1,4 @@
+[console_scripts]
+indian-nlp-collect = src.scripts.collect_data:main
+indian-nlp-evaluate = src.scripts.evaluate:main
+indian-nlp-train = src.scripts.train:main
