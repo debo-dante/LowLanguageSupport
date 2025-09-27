@@ -722,7 +722,7 @@ MIT License - Feel free to use, modify, and distribute! 🎉
 
 ## 📧 Contact & Support
 
-- 📧 **Email**: eng24cse0010@dsu.edu.in
+- 📧 **Email**: eng24cse0010@dsu.edu.in   eng24cse0002@dsu.edu.in
 
 ### 🎆 Community
 
