@@ -474,6 +474,154 @@ class KannadaDataCollector(WebScraper):
             stats['max_kannada_ratio'] = df['kannada_ratio'].max()
         
         return stats
+    
+    def collect_sample_data(self, num_samples: int = 20) -> List[Dict[str, str]]:
+        """
+        Collect sample Kannada data for testing and development.
+        
+        Args:
+            num_samples: Number of sample texts to generate
+            
+        Returns:
+            List of sample text data with metadata
+        """
+        self.logger.info(f"Generating {num_samples} sample Kannada texts")
+        
+        # Sample Kannada texts for development and testing
+        sample_texts = [
+            {
+                'text': 'ಕನ್ನಡ ಭಾಷೆಯು ದ್ರಾವಿಡ ಭಾಷಾ ಕುಟುಂಬದ ಒಂದು ಸುಂದರ ಭಾಷೆಯಾಗಿದೆ.',
+                'source': 'sample',
+                'category': 'language',
+                'title': 'ಕನ್ನಡ ಭಾಷೆ'
+            },
+            {
+                'text': 'ಬೆಂಗಳೂರು ಭಾರತದ ಸಿಲಿಕನ್ ವ್ಯಾಲಿ ಎಂದು ಕರೆಯಲಾಗುತ್ತದೆ.',
+                'source': 'sample',
+                'category': 'geography',
+                'title': 'ಬೆಂಗಳೂರು ನಗರ'
+            },
+            {
+                'text': 'ಕೃತ್ರಿಮ ಬುದ್ಧಿಮತ್ತೆ ಮತ್ತು ಯಂತ್ರ ಕಲಿಕೆ ಭವಿಷ್ಯದ ತಂತ್ರಜ್ಞಾನಗಳು.',
+                'source': 'sample',
+                'category': 'technology',
+                'title': 'ಆಧುನಿಕ ತಂತ್ರಜ್ಞಾನ'
+            },
+            {
+                'text': 'ಕರ್ನಾಟಕದ ಸಂಸ್ಕೃತಿ ಮತ್ತು ಪರಂಪರೆ ಬಹಳ ಶ್ರೀಮಂತವಾಗಿದೆ.',
+                'source': 'sample',
+                'category': 'culture',
+                'title': 'ಕರ್ನಾಟಕ ಸಂಸ್ಕೃತಿ'
+            },
+            {
+                'text': 'ಹಂಪಿಯು ವಿಜಯನಗರ ಸಾಮ್ರಾಜ್ಯದ ರಾಜಧಾನಿಯಾಗಿತ್ತು. ಇದು ಯುನೆಸ್ಕೋ ವಿಶ್ವ ಪರಂಪರೆ ತಾಣವಾಗಿದೆ.',
+                'source': 'sample',
+                'category': 'history',
+                'title': 'ಹಂಪಿ ಇತಿಹಾಸ'
+            },
+            {
+                'text': 'ಕನ್ನಡ ಸಾಹಿತ್ಯದಲ್ಲಿ ಪಂಪ, ರನ್ನ, ಪೊನ್ನ ಮುಂತಾದ ಮಹಾಕವಿಗಳು ಇದ್ದಾರೆ.',
+                'source': 'sample',
+                'category': 'literature',
+                'title': 'ಕನ್ನಡ ಸಾಹಿತ್ಯ'
+            },
+            {
+                'text': 'ಮೈಸೂರು ಅರಮನೆಯು ಕರ್ನಾಟಕದ ಪ್ರಸಿದ್ಧ ವಾಸ್ತುಶಿಲ್ಪದ ಉದಾಹರಣೆಯಾಗಿದೆ.',
+                'source': 'sample',
+                'category': 'architecture',
+                'title': 'ಮೈಸೂರು ಅರಮನೆ'
+            },
+            {
+                'text': 'ಕರ್ನಾಟಕ ಸಂಗೀತವು ಭಾರತೀಯ ಶಾಸ್ತ್ರೀಯ ಸಂಗೀತದ ಪ್ರಮುಖ ಅಂಗವಾಗಿದೆ.',
+                'source': 'sample',
+                'category': 'music',
+                'title': 'ಕರ್ನಾಟಕ ಸಂಗೀತ'
+            },
+            {
+                'text': 'ಉಡುಪಿ ಸಾಂಬಾರ್ ಮತ್ತು ರಾಗಿ ಮುದ್ದೆ ಕರ್ನಾಟಕದ ಪ್ರಸಿದ್ಧ ಆಹಾರಗಳು.',
+                'source': 'sample',
+                'category': 'food',
+                'title': 'ಕನ್ನಡ ಆಹಾರ'
+            },
+            {
+                'text': 'ಕೋಡಗು ಕಾಫಿ ತೋಟಗಳಿಗೆ ಪ್ರಸಿದ್ಧವಾಗಿದೆ. ಇಲ್ಲಿನ ಹವಾಮಾನವು ಕಾಫಿ ಬೆಳೆಗೆ ಅನುಕೂಲವಾಗಿದೆ.',
+                'source': 'sample',
+                'category': 'agriculture',
+                'title': 'ಕೋಡಗು ಕಾಫಿ'
+            },
+            {
+                'text': 'ಬೆಳಗಾವಿ ಮತ್ತು ಹುಬ್ಳಿ ಕರ್ನಾಟಕದ ಪ್ರಮುಖ ಕೈಗಾರಿಕಾ ಕೇಂದ್ರಗಳಾಗಿವೆ.',
+                'source': 'sample',
+                'category': 'industry',
+                'title': 'ಕೈಗಾರಿಕಾ ಅಭಿವೃದ್ಧಿ'
+            },
+            {
+                'text': 'ಕನ್ನಡ ಯೋಗ ಮತ್ತು ಆಯುರ್ವೇದ ಪರಂಪರೆಯು ಅತ್ಯಂತ ಪ್ರಾಚೀನವಾಗಿದೆ.',
+                'source': 'sample',
+                'category': 'wellness',
+                'title': 'ಆಯುರ್ವೇದ ಪರಂಪರೆ'
+            },
+            {
+                'text': 'ನಾಲಂದಾ ಮತ್ತು ತಕ್ಷಶಿಲಾದಂತಹ ಪ್ರಾಚೀನ ವಿಶ್ವವಿದ್ಯಾಲಯಗಳು ಭಾರತದ ಶಿಕ್ಷಣ ಪರಂಪರೆಯನ್ನು ತೋರಿಸುತ್ತವೆ.',
+                'source': 'sample',
+                'category': 'education',
+                'title': 'ಪ್ರಾಚೀನ ಶಿಕ್ಷಣ'
+            },
+            {
+                'text': 'ಶ್ರೀ ರಂಗಪಟ್ಟಣವು ಟಿಪ್ಪು ಸುಲ್ತಾನನ ರಾಜಧಾನಿಯಾಗಿತ್ತು.',
+                'source': 'sample',
+                'category': 'history',
+                'title': 'ಟಿಪ್ಪು ಸುಲ್ತಾನ'
+            },
+            {
+                'text': 'ಬಸವೇಶ್ವರರು ಸಮಾಜ ಸುಧಾರಕರಾಗಿ ಲಿಂಗಾಯತ ಧರ್ಮವನ್ನು ಸ್ಥಾಪಿಸಿದರು.',
+                'source': 'sample',
+                'category': 'philosophy',
+                'title': 'ಬಸವೇಶ್ವರ ತತ್ವಜ್ಞಾನ'
+            },
+            {
+                'text': 'ಗೋಕರ್ಣ ಮತ್ತು ಮುರುಡೇಶ್ವರ ಕರಾವಳಿ ಪ್ರದೇಶದ ಪ್ರಸಿದ್ಧ ದೇವಾಲಯಗಳಾಗಿವೆ.',
+                'source': 'sample',
+                'category': 'religion',
+                'title': 'ಕರಾವಳಿ ದೇವಾಲಯಗಳು'
+            },
+            {
+                'text': 'ಕನ್ನಡ ಭಾಷೆಯಲ್ಲಿ ಪಂಚತಂತ್ರ ಮತ್ತು ಮಹಾಭಾರತದಂತಹ ಮಹಾಕಾವ್ಯಗಳು ಬರೆಯಲಾಗಿವೆ.',
+                'source': 'sample',
+                'category': 'literature',
+                'title': 'ಮಹಾಕಾವ್ಯ ಸಾಹಿತ್ಯ'
+            },
+            {
+                'text': 'ಚಂದ್ರಗುಪ್ತ ಮೌರ್ಯನು ಶ್ರವಣಬೆಳಗೊಳದಲ್ಲಿ ಜೈನ ಸಂತನಾಗಿ ಜೀವನ ಕಳೆದನು.',
+                'source': 'sample',
+                'category': 'history',
+                'title': 'ಚಂದ್ರಗುಪ್ತ ಮೌರ್ಯ'
+            },
+            {
+                'text': 'ಬಾದಾಮಿ ಗುಹೆಗಳು ಚಾಲುಕ್ಯ ವಾಸ್ತುಶಿಲ್ಪದ ಅದ್ಭುತ ಉದಾಹರಣೆಗಳಾಗಿವೆ.',
+                'source': 'sample',
+                'category': 'architecture',
+                'title': 'ಬಾದಾಮಿ ಗುಹೆಗಳು'
+            },
+            {
+                'text': 'ಕರ್ನಾಟಕದ ಯಕ್ಷಗಾನ ಮತ್ತು ಭರತನಾಟ್ಯ ಶಾಸ್ತ್ರೀಯ ನೃತ್ಯ ರೂಪಗಳಾಗಿವೆ.',
+                'source': 'sample',
+                'category': 'dance',
+                'title': 'ಶಾಸ್ತ್ರೀಯ ನೃತ್ಯ'
+            }
+        ]
+        
+        # Return requested number of samples (cycle through if needed)
+        selected_samples = []
+        for i in range(num_samples):
+            sample = sample_texts[i % len(sample_texts)].copy()
+            sample['timestamp'] = pd.Timestamp.now().isoformat()
+            sample['word_count'] = len(sample['text'].split())
+            sample['text_length'] = len(sample['text'])
+            selected_samples.append(sample)
+        
+        self.logger.info(f"Generated {len(selected_samples)} sample texts")
+        return selected_samples
 
 
 def demonstrate_kannada_collection():

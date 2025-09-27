@@ -62,6 +62,9 @@ class IndianLanguageModel(nn.Module):
         """
         super().__init__()
         
+        # Setup logging first
+        self.logger = logging.getLogger(__name__)
+        
         self.language = language
         self.model_type = model_type
         self.config = self._create_config(
@@ -75,9 +78,6 @@ class IndianLanguageModel(nn.Module):
             self._load_pretrained(pretrained_model_name)
         else:
             self._initialize_from_scratch()
-        
-        # Setup logging
-        self.logger = logging.getLogger(__name__)
         
         # Language-specific adaptations
         self._setup_language_adaptations()
