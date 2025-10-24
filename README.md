@@ -81,6 +81,39 @@ NLP/
 - **RAM**: Minimum 8GB (16GB+ recommended for training)
 - **Storage**: At least 10GB free space
 - **GPU**: Optional but recommended (CUDA-compatible for training)
+- **Docker**: Optional but recommended for containerized deployment
+
+### 🐳 Quick Start with Docker (Recommended)
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/indian-language-nlp.git
+cd indian-language-nlp
+
+# Start the development environment with Jupyter
+docker-compose up nlp-app
+
+# Access Jupyter Notebook at http://localhost:8888
+# Access TensorBoard at http://localhost:6006
+```
+
+**Training with GPU support:**
+```bash
+# Run training service with GPU
+docker-compose --profile train up nlp-train
+```
+
+**Run tests in Docker:**
+```bash
+# Build and run tests
+docker-compose run nlp-app python -m pytest tests/
+```
+
+**Interactive shell:**
+```bash
+# Enter the container
+docker-compose run nlp-app bash
+```
 
 ### 🐍 Quick Install (All Platforms)
 
@@ -385,6 +418,242 @@ nvidia-smi
 ```
 
 </details>
+
+---
+
+## 🐳 Docker Setup Guide
+
+### Installing Docker
+
+<details>
+<summary>🍎 <strong>macOS</strong></summary>
+
+#### Method 1: Using Homebrew (Recommended)
+```bash
+# Install Docker Desktop
+brew install --cask docker
+
+# Start Docker Desktop from Applications
+open /Applications/Docker.app
+
+# Verify installation
+docker --version
+docker-compose --version
+```
+
+#### Method 2: Manual Installation
+1. Download Docker Desktop from [docker.com](https://www.docker.com/products/docker-desktop)
+2. Install the `.dmg` file
+3. Launch Docker Desktop from Applications
+4. Verify installation in terminal:
+   ```bash
+   docker --version
+   docker-compose --version
+   ```
+
+</details>
+
+<details>
+<summary>🧠 <strong>Windows</strong></summary>
+
+#### Prerequisites
+- Windows 10/11 64-bit (Pro, Enterprise, or Education)
+- WSL 2 enabled
+
+#### Installation Steps
+1. Enable WSL 2:
+   ```powershell
+   # Run in PowerShell as Administrator
+   wsl --install
+   ```
+
+2. Download Docker Desktop from [docker.com](https://www.docker.com/products/docker-desktop)
+
+3. Run the installer and follow the setup wizard
+
+4. Restart your computer
+
+5. Verify installation:
+   ```powershell
+   docker --version
+   docker-compose --version
+   ```
+
+</details>
+
+<details>
+<summary>🐧 <strong>Linux</strong></summary>
+
+#### Ubuntu/Debian
+```bash
+# Update package index
+sudo apt-get update
+
+# Install prerequisites
+sudo apt-get install ca-certificates curl gnupg lsb-release
+
+# Add Docker's official GPG key
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+# Set up repository
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Install Docker Engine
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+# Add user to docker group (optional, avoids using sudo)
+sudo usermod -aG docker $USER
+newgrp docker
+
+# Verify installation
+docker --version
+docker compose version
+```
+
+#### CentOS/RHEL/Fedora
+```bash
+# Install required packages
+sudo dnf -y install dnf-plugins-core
+
+# Add Docker repository
+sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+# Install Docker
+sudo dnf install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+# Start Docker
+sudo systemctl start docker
+sudo systemctl enable docker
+
+# Add user to docker group
+sudo usermod -aG docker $USER
+newgrp docker
+
+# Verify
+docker --version
+docker compose version
+```
+
+</details>
+
+### Using Docker with This Project
+
+#### Basic Commands
+
+```bash
+# Start all services
+docker-compose up
+
+# Start in detached mode (background)
+docker-compose up -d
+
+# Stop all services
+docker-compose down
+
+# View logs
+docker-compose logs -f
+
+# Rebuild containers after code changes
+docker-compose up --build
+```
+
+#### Development Workflow
+
+```bash
+# 1. Start Jupyter environment
+docker-compose up nlp-app
+
+# 2. Open browser to http://localhost:8888
+# The Jupyter token will be displayed in the terminal
+
+# 3. Run Kannada demo in container
+docker-compose run nlp-app python scripts/kannada_demo.py
+
+# 4. Run tests
+docker-compose run nlp-app python -m pytest tests/ -v
+
+# 5. Interactive Python shell
+docker-compose run nlp-app python
+```
+
+#### GPU Support (NVIDIA)
+
+To use GPU acceleration with Docker:
+
+```bash
+# Install NVIDIA Container Toolkit (Linux)
+curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+  sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+  sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+sudo apt-get update
+sudo apt-get install -y nvidia-container-toolkit
+sudo systemctl restart docker
+
+# Run training with GPU
+docker-compose --profile train up nlp-train
+```
+
+#### Environment Variables
+
+Create a `.env` file in the project root for custom configuration:
+
+```bash
+# .env file
+WANDB_API_KEY=your_wandb_api_key_here
+JUPYTER_PORT=8888
+TENSORBOARD_PORT=6006
+```
+
+#### Docker Tips
+
+**Persistent Data:**
+Volumes are automatically mounted for:
+- `./src` - Source code (live updates)
+- `./data` - Data files
+- `./notebooks` - Jupyter notebooks
+- `./configs` - Configuration files
+- `./scripts` - Utility scripts
+
+**Clean Up:**
+```bash
+# Remove containers
+docker-compose down
+
+# Remove containers and volumes
+docker-compose down -v
+
+# Remove all unused Docker resources
+docker system prune -a
+```
+
+**Troubleshooting:**
+
+*Issue: Port already in use*
+```bash
+# Change ports in docker-compose.yml or stop conflicting service
+sudo lsof -i :8888
+```
+
+*Issue: Permission denied (Linux)*
+```bash
+# Add user to docker group
+sudo usermod -aG docker $USER
+newgrp docker
+```
+
+*Issue: Container won't start*
+```bash
+# Check logs
+docker-compose logs nlp-app
+
+# Rebuild from scratch
+docker-compose build --no-cache
+```
 
 ---
 
