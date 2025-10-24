@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  nlp-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: indian-language-nlp
+    volumes:
+      # Mount source code for development
+      - ./src:/app/src
+      - ./data:/app/data
+      - ./notebooks:/app/notebooks
+      - ./configs:/app/configs
+      - ./scripts:/app/scripts
+    ports:
+      - "8888:8888"  # Jupyter notebook
+      - "6006:6006"  # TensorBoard
+    environment:
+      - PYTHONUNBUFFERED=1
+      - WANDB_API_KEY=${WANDB_API_KEY:-}
+    command: bash -c "jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root"
+    stdin_open: true
+    tty: true
+
+  # Optional: Service for training with GPU support
+  nlp-train:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: indian-language-nlp-train
+    volumes:
+      - ./src:/app/src
+      - ./data:/app/data
+      - ./configs:/app/configs
+    environment:
+      - PYTHONUNBUFFERED=1
+      - WANDB_API_KEY=${WANDB_API_KEY:-}
+    command: python -m src.scripts.train
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    profiles:
+      - train
