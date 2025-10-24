@@ -80,9 +80,9 @@ LowLanguageSupport/
 
 ### Prerequisites
 
-- **Python**: 3.8 or higher
+- **Python**: 3.8 or higher (3.13 tested and working)
 - **RAM**: Minimum 8GB (16GB+ recommended for training)
-- **Storage**: At least 10GB free space
+- **Storage**: At least 10GB free space (CPU-only PyTorch ~200MB, CUDA version ~3GB)
 - **GPU**: Optional but recommended (CUDA-compatible for training)
 - **Docker**: Optional but recommended for containerized deployment
 
@@ -125,9 +125,16 @@ docker-compose run nlp-app bash
 git clone https://github.com/debo-dante/LowLanguageSupport.git
 cd LowLanguageSupport
 
-# Install using pip
+# Create virtual environment (recommended)
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
 pip install -r requirements.txt
 pip install -e .
+
+# For CPU-only installation (saves ~2.8GB disk space):
+pip install torch --index-url https://download.pytorch.org/whl/cpu
 ```
 
 ---
@@ -160,6 +167,9 @@ pip install -r requirements.txt
 
 # Install package in development mode
 pip install -e .
+
+# Note: If you have disk space constraints, install CPU-only PyTorch:
+pip install torch --index-url https://download.pytorch.org/whl/cpu
 ```
 
 ### Method 2: Using Conda
@@ -215,6 +225,12 @@ pip install --user -r requirements.txt
 conda install pytorch torchvision torchaudio -c pytorch -c conda-forge
 ```
 
+**Issue: Disk Space Constraints**
+```bash
+# Install CPU-only PyTorch (~200MB instead of ~3GB)
+pip install torch --index-url https://download.pytorch.org/whl/cpu
+```
+
 </details>
 
 <details>
@@ -243,6 +259,9 @@ pip install -r requirements.txt
 
 REM Install package in development mode
 pip install -e .
+
+REM Note: If you have disk space constraints, install CPU-only PyTorch:
+pip install torch --index-url https://download.pytorch.org/whl/cpu
 ```
 
 ### Method 2: Using PowerShell
@@ -303,6 +322,12 @@ REM Enable "Enable Win32 long paths"
 - Download and install "Microsoft C++ Build Tools" from Microsoft
 - Or install "Visual Studio Community" with C++ workload
 
+**Issue: Disk Space Constraints**
+```cmd
+REM Install CPU-only PyTorch (~200MB instead of ~3GB)
+pip install torch --index-url https://download.pytorch.org/whl/cpu
+```
+
 </details>
 
 <details>
@@ -334,6 +359,9 @@ pip install -r requirements.txt
 
 # Install package in development mode
 pip install -e .
+
+# Note: If you have disk space constraints, install CPU-only PyTorch:
+pip install torch --index-url https://download.pytorch.org/whl/cpu
 ```
 
 #### CentOS/RHEL/Fedora
@@ -418,6 +446,12 @@ sudo dnf install python3-devel gcc gcc-c++
 # Verify CUDA installation
 nvcc --version
 nvidia-smi
+```
+
+**Issue: Disk Space Constraints**
+```bash
+# Install CPU-only PyTorch (~200MB instead of ~3GB)
+pip install torch --index-url https://download.pytorch.org/whl/cpu
 ```
 
 </details>
@@ -617,10 +651,14 @@ TENSORBOARD_PORT=6006
 **Persistent Data:**
 Volumes are automatically mounted for:
 - `./src` - Source code (live updates)
-- `./data` - Data files
 - `./notebooks` - Jupyter notebooks
 - `./configs` - Configuration files
 - `./scripts` - Utility scripts
+- `./tests` - Test files
+- Named volumes for persistent data:
+  - `nlp-data` - Training and processed data
+  - `nlp-outputs` - Model outputs and results
+  - `nlp-models` - Saved model checkpoints
 
 **Clean Up:**
 ```bash
@@ -914,10 +952,25 @@ src/
 
 ### Common Issues
 
+**Issue: `ModuleNotFoundError: No module named 'torch'`**
+```bash
+# Solution 1: Install PyTorch (standard with CUDA support)
+pip install torch
+
+# Solution 2: Install CPU-only version (recommended for disk space constraints)
+pip install torch --index-url https://download.pytorch.org/whl/cpu
+```
+
 **Issue: `ModuleNotFoundError: No module named 'src'`**
 ```bash
 # Solution: Install package in editable mode
 pip install -e .
+```
+
+**Issue: Disk quota exceeded during pip install**
+```bash
+# Solution: Install CPU-only PyTorch (saves ~2.8GB)
+pip install torch --index-url https://download.pytorch.org/whl/cpu
 ```
 
 **Issue: CUDA out of memory**

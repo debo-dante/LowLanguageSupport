@@ -5,7 +5,11 @@ Basic functionality test for Kannada NLP framework
 
 import sys
 import os
-sys.path.append('src')
+
+# Get the project root directory
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(project_root, 'src'))
+os.chdir(project_root)  # Change to project root for relative paths
 
 print("🔤 ಕನ್ನಡ NLP ಮೂಲಭೂತ ಪರೀಕ್ಷೆ (Kannada NLP Basic Test)")
 print("=" * 60)

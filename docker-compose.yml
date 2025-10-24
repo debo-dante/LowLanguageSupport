@@ -9,10 +9,15 @@ services:
     volumes:
       # Mount source code for development
       - ./src:/app/src
-      - ./data:/app/data
       - ./notebooks:/app/notebooks
       - ./configs:/app/configs
       - ./scripts:/app/scripts
+      - ./tests:/app/tests
+      # Mount data directories (created by Dockerfile)
+      - nlp-data:/app/data
+      # Mount outputs and models for persistence
+      - nlp-outputs:/app/outputs
+      - nlp-models:/app/models
     ports:
       - "8888:8888"  # Jupyter notebook
       - "6006:6006"  # TensorBoard
@@ -31,8 +36,11 @@ services:
     container_name: indian-language-nlp-train
     volumes:
       - ./src:/app/src
-      - ./data:/app/data
       - ./configs:/app/configs
+      # Mount data and models for training
+      - nlp-data:/app/data
+      - nlp-outputs:/app/outputs
+      - nlp-models:/app/models
     environment:
       - PYTHONUNBUFFERED=1
       - WANDB_API_KEY=${WANDB_API_KEY:-}
@@ -46,3 +54,12 @@ services:
               capabilities: [gpu]
     profiles:
       - train
+
+# Named volumes for data persistence
+volumes:
+  nlp-data:
+    driver: local
+  nlp-outputs:
+    driver: local
+  nlp-models:
+    driver: local
