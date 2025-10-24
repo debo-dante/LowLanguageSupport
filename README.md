@@ -33,7 +33,7 @@ Initial focus on:
 ## 📁 Project Structure
 
 ```
-NLP/
+LowLanguageSupport/
 ├── 📂 data/                    # Data storage
 │   ├── 📂 raw/                # Raw text data
 │   ├── 📂 processed/          # Preprocessed datasets
@@ -42,7 +42,8 @@ NLP/
 │   ├── 📂 data_collection/    # Data gathering scripts
 │   ├── 📂 preprocessing/      # Text preprocessing modules
 │   ├── 📂 models/            # Model architectures and training
-│   └── 📂 evaluation/        # Evaluation and benchmarking
+│   ├── 📂 evaluation/        # Evaluation and benchmarking
+│   └── 📂 scripts/           # Training and utility scripts
 ├── 📂 notebooks/             # Jupyter notebooks for exploration
 ├── 📂 scripts/               # Utility scripts
 ├── 📂 configs/               # Configuration files
@@ -50,6 +51,8 @@ NLP/
 ├── 📂 tests/                 # Unit tests
 ├── 📄 requirements.txt       # Python dependencies
 ├── 📄 environment.yml        # Conda environment
+├── 📄 docker-compose.yml     # Docker configuration
+├── 📄 Dockerfile            # Docker image definition
 └── 📄 setup.py              # Package installation
 ```
 
@@ -87,8 +90,8 @@ NLP/
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/indian-language-nlp.git
-cd indian-language-nlp
+git clone https://github.com/debo-dante/LowLanguageSupport.git
+cd LowLanguageSupport
 
 # Start the development environment with Jupyter
 docker-compose up nlp-app
@@ -119,8 +122,8 @@ docker-compose run nlp-app bash
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/indian-language-nlp.git
-cd indian-language-nlp
+git clone https://github.com/debo-dante/LowLanguageSupport.git
+cd LowLanguageSupport
 
 # Install using pip
 pip install -r requirements.txt
@@ -142,8 +145,8 @@ python3 --version
 # Should be 3.8 or higher
 
 # Clone the repository
-git clone https://github.com/yourusername/indian-language-nlp.git
-cd indian-language-nlp
+git clone https://github.com/debo-dante/LowLanguageSupport.git
+cd LowLanguageSupport
 
 # Create virtual environment
 python3 -m venv venv
@@ -180,8 +183,8 @@ pip install -e .
 brew install python@3.11
 
 # Clone and setup
-git clone https://github.com/yourusername/indian-language-nlp.git
-cd indian-language-nlp
+git clone https://github.com/debo-dante/LowLanguageSupport.git
+cd LowLanguageSupport
 
 # Create virtual environment
 python3.11 -m venv venv
@@ -225,8 +228,8 @@ python --version
 REM Should be 3.8 or higher
 
 REM Clone the repository
-git clone https://github.com/yourusername/indian-language-nlp.git
-cd indian-language-nlp
+git clone https://github.com/debo-dante/LowLanguageSupport.git
+cd LowLanguageSupport
 
 REM Create virtual environment
 python -m venv venv
@@ -249,7 +252,7 @@ pip install -e .
 python --version
 
 # Clone the repository
-git clone https://github.com/yourusername/indian-language-nlp.git
+git clone https://github.com/debo-dante/LowLanguageSupport.git
 Set-Location indian-language-nlp
 
 # Create virtual environment
@@ -316,8 +319,8 @@ sudo apt update
 sudo apt install python3 python3-pip python3-venv git
 
 # Clone the repository
-git clone https://github.com/yourusername/indian-language-nlp.git
-cd indian-language-nlp
+git clone https://github.com/debo-dante/LowLanguageSupport.git
+cd LowLanguageSupport
 
 # Create virtual environment
 python3 -m venv venv
@@ -340,8 +343,8 @@ sudo dnf install python3 python3-pip python3-venv git gcc python3-devel
 # For CentOS 7: sudo yum install python3 python3-pip git gcc python3-devel
 
 # Clone and setup
-git clone https://github.com/yourusername/indian-language-nlp.git
-cd indian-language-nlp
+git clone https://github.com/debo-dante/LowLanguageSupport.git
+cd LowLanguageSupport
 
 # Create virtual environment
 python3 -m venv venv
@@ -359,8 +362,8 @@ pip install -e .
 sudo pacman -S python python-pip git base-devel
 
 # Clone and setup
-git clone https://github.com/yourusername/indian-language-nlp.git
-cd indian-language-nlp
+git clone https://github.com/debo-dante/LowLanguageSupport.git
+cd LowLanguageSupport
 
 # Create virtual environment
 python -m venv venv
@@ -714,7 +717,7 @@ model = IndianLanguageModel(
 
 # Train the model
 model.train(clean_data, epochs=10)
-model.save_model('models/kannada_bert')
+model.save_model('data/models/kannada_bert')
 ```
 
 #### 4. **📊 Evaluation**: Assess model performance
@@ -785,7 +788,7 @@ indian-nlp-collect --language kannada --source web --output data/raw/
 indian-nlp-train --config configs/kannada_config.yaml --data data/processed/
 
 # Model evaluation
-indian-nlp-evaluate --model models/kannada_bert --test-data data/test/
+indian-nlp-evaluate --model data/models/kannada_bert --test-data data/processed/test/
 
 # Run interactive demo
 python scripts/kannada_demo.py
@@ -831,7 +834,7 @@ sbatch scripts/slurm_train.sh
 from src.models import IndianLanguageModel
 
 # Load trained model
-model = IndianLanguageModel.load_from_checkpoint('models/kannada_bert')
+model = IndianLanguageModel.load_from_checkpoint('data/models/kannada_bert')
 
 # Generate embeddings
 text = "ಕನ್ನಡ ಭಾಷೆಯು ದ್ರಾವಿಡ ಭಾಷಾ ಕುಟುಂಬದ ಒಂದು ಸುಂದರ ಭಾಷೆಯಾಗಿದೆ."
@@ -863,8 +866,8 @@ print(generated)
 
 ```bash
 # Clone with development dependencies
-git clone https://github.com/yourusername/indian-language-nlp.git
-cd indian-language-nlp
+git clone https://github.com/debo-dante/LowLanguageSupport.git
+cd LowLanguageSupport
 
 # Install development dependencies
 pip install -e ".[dev]"
@@ -1004,6 +1007,6 @@ MIT License - Feel free to use, modify, and distribute! 🎉
 
 *Made with ❤️ for Indian languages*
 
-**[⭐ Star us on GitHub](https://github.com/yourusername/indian-language-nlp)** • **[🍴 Fork the project](https://github.com/yourusername/indian-language-nlp/fork)** • **[📖 Read the docs](https://yoursite.com/docs)**
+**[⭐ Star us on GitHub](https://github.com/debo-dante/LowLanguageSupport)** • **[🍴 Fork the project](https://github.com/debo-dante/LowLanguageSupport/fork)** • **[📖 Read the docs](https://github.com/debo-dante/LowLanguageSupport)**
 
 </div>
